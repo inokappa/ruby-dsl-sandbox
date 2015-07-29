@@ -1,0 +1,31 @@
+ecs_task "foo" do
+  name "foo"
+  image "foo"
+  cpu 0
+  memory 100
+  portmappings "web" do
+    containerPort 4567
+    hostPort 0
+  end
+  environment "redis" do
+    name "REDIS_HOST"
+    value "redis"
+  end
+  links do
+    "redis"
+  end
+  command "\"/bin/sh\", \"-c\", \"hostname -s > /tmp/index.html ; cd /tmp/ ; python -m SimpleHTTPServer 4567\""
+end
+
+ecs_task "redis" do
+  name "redis"
+  image "redis"
+  cpu 0
+  memory 100
+  portmappings "redis" do
+    containerPort 6379
+    hostPort 0
+  end
+  essential true
+end
+
